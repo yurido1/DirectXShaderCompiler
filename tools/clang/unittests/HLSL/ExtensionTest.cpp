@@ -604,7 +604,7 @@ TEST_F(ExtensionTest, IntrinsicWhenAvailableThenUsed) {
     disassembly.find("call void @\"test.\\01?test_proc@hlsl@@YAXV?$vector@M$01@@@Z.r\"(i32 2, float"));
   VERIFY_IS_TRUE(
     disassembly.npos !=
-    disassembly.find("call float @\"test.\\01?test_fn@hlsl@@YA?AV?$vector@M$01@@V2@@Z.r\"(i32 1, float"));
+    disassembly.find("call fast float @\"test.\\01?test_fn@hlsl@@YA?AV?$vector@M$01@@V2@@Z.r\"(i32 1, float"));
   VERIFY_IS_TRUE(
     disassembly.npos !=
     disassembly.find("call i32 @\"test.\\01?test_fn@hlsl@@YA?AV?$vector@H$01@@V2@@Z.r\"(i32 1, i32"));
@@ -633,7 +633,7 @@ TEST_F(ExtensionTest, CustomIntrinsicName) {
   // - custom name works for polymorphic function
   VERIFY_IS_TRUE(
     disassembly.npos !=
-    disassembly.find("call float @test_poly.float(i32 3, float"));
+    disassembly.find("call fast float @test_poly.float(i32 3, float"));
   VERIFY_IS_TRUE(
     disassembly.npos !=
     disassembly.find("call i32 @test_poly.i32(i32 3, i32"));
@@ -661,7 +661,7 @@ TEST_F(ExtensionTest, NoLowering) {
   // - non-lowered function has vector type as argument
   VERIFY_IS_TRUE(
     disassembly.npos !=
-    disassembly.find("call <2 x float> @test_nolower.float(i32 5, <2 x float>"));
+    disassembly.find("call fast <2 x float> @test_nolower.float(i32 5, <2 x float>"));
   VERIFY_IS_TRUE(
     disassembly.npos !=
     disassembly.find("call <2 x i32> @test_nolower.i32(i32 5, <2 x i32>"));
@@ -695,7 +695,7 @@ TEST_F(ExtensionTest, PackedLowering) {
     disassembly.find("call { float, float } @test_pack_2.float(i32 8, { float, float }"));
   VERIFY_IS_TRUE(
     disassembly.npos !=
-    disassembly.find("call float @test_pack_3.float(i32 9, { float, float }"));
+    disassembly.find("call fast float @test_pack_3.float(i32 9, { float, float }"));
   VERIFY_IS_TRUE(
     disassembly.npos !=
     disassembly.find("call { float, float } @test_pack_4.float(i32 10, { float, float, float }"));
@@ -715,7 +715,7 @@ TEST_F(ExtensionTest, ReplicateLoweringWhenOnlyVectorIsResult) {
   // - replicate strategy works for vector results
   VERIFY_IS_TRUE(
     disassembly.npos !=
-    disassembly.find("call float @test_rand(i32 11)"));
+    disassembly.find("call fast float @test_rand(i32 11)"));
 }
 
 TEST_F(ExtensionTest, UnsignedOpcodeIsUnchanged) {
