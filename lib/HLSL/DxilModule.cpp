@@ -1016,7 +1016,6 @@ void DxilModule::EmitDxilMetadata() {
   Entries.emplace_back(pEntry);
   m_pMDHelper->EmitDxilEntryPoints(Entries);
 
-  //QQQ
   m_pMDHelper->EmitDxilPreciseMD();
 
   if (!m_RootSignature->IsEmpty()) {
@@ -1055,7 +1054,6 @@ void DxilModule::LoadDxilMetadata() {
 
   m_pMDHelper->LoadDxilTypeSystem(*m_pTypeSystem.get());
 
-  //QQQ
   m_pMDHelper->LoadDxilPreciseMD();
 
   m_pMDHelper->LoadRootSignature(*m_RootSignature.get());

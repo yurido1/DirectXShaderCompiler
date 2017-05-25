@@ -186,6 +186,11 @@ namespace llvm {
       return FMF;
     }
 
+    bool EatFastMathFlagsIfPresent(FastMathFlags &FMF) {
+      FMF = EatFastMathFlagsIfPresent();
+      return false;
+    }
+
     bool ParseOptionalToken(lltok::Kind T, bool &Present,
                             LocTy *Loc = nullptr) {
       if (Lex.getKind() != T) {

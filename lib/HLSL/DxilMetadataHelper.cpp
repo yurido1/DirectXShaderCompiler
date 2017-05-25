@@ -911,7 +911,6 @@ MDNode *DxilMDHelper::EmitControlFlowHints(llvm::LLVMContext &Ctx, std::vector<D
   return hintsNode;
 }
 
-//QQQ
 void DxilMDHelper::EmitDxilPreciseMD() {
   MDNode *pDXPreciseMD = MDNode::get(m_pModule->getContext(), ConstantAsMetadata::get(ConstantInt::get(Type::getInt32Ty(m_pModule->getContext()), 1)));
 
@@ -928,6 +927,8 @@ void DxilMDHelper::EmitDxilPreciseMD() {
             FastMathFlags FMF = CI->getFastMathFlags();
             if (!FMF.unsafeAlgebra()) {
               pMD = pDXPreciseMD;
+            } else {
+              CI->copyFastMathFlags(FastMathFlags{});
             }
             CI->setMetadata(DxilMDHelper::kDxilPreciseAttributeMDName, pMD);
           }

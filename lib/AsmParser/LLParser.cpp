@@ -5213,10 +5213,12 @@ bool LLParser::ParseCall(Instruction *&Inst, PerFunctionState &PFS,
   ValID CalleeID;
   SmallVector<ParamInfo, 16> ArgList;
   LocTy CallLoc = Lex.getLoc();
+  FastMathFlags FMF;
 
   if ((TCK != CallInst::TCK_None &&
        ParseToken(lltok::kw_call, "expected 'tail call'")) ||
       ParseOptionalCallingConv(CC) ||
+      EatFastMathFlagsIfPresent(FMF) ||
       ParseOptionalReturnAttrs(RetAttrs) ||
       ParseType(RetType, RetTypeLoc, true /*void allowed*/) ||
       ParseValID(CalleeID) ||
@@ -5297,6 +5299,8 @@ bool LLParser::ParseCall(Instruction *&Inst, PerFunctionState &PFS,
   CI->setTailCallKind(TCK);
   CI->setCallingConv(CC);
   CI->setAttributes(PAL);
+  if (FMF.any())
+    CI->setFastMathFlags(FMF);
   ForwardRefAttrGroups[CI] = FwdRefAttrGrps;
   Inst = CI;
   return false;
