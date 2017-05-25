@@ -1,6 +1,6 @@
 // RUN: %dxc -E main -T vs_6_0 %s | FileCheck %s
 
-// CHECK: !dx.precise
+// CHECK-NOT: fast
 
 //--------------------------------------------------------------------------------------
 // File: BasicHLSL11_VS.hlsl
