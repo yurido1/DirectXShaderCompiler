@@ -2977,9 +2977,9 @@ TEST_F(ValidationTest, GetAttributeAtVertexInVSFail) {
   RewriteAssemblyCheckMsg(
     "float4 main(float4 pos: POSITION) : SV_POSITION { return pos.x; }",
     "vs_6_1",
-    { "call float @dx.op.loadInput.f32(i32 4, i32 0, i32 0, i8 0, i32 undef)",
+    { "call fast float @dx.op.loadInput.f32(i32 4, i32 0, i32 0, i8 0, i32 undef)",
     "declare float @dx.op.loadInput.f32(i32, i32, i32, i8, i32)" },
-    { "call float @dx.op.attributeAtVertex.f32(i32 137, i32 0, i32 0, i8 0, i8 0)",
+    { "call fast float @dx.op.attributeAtVertex.f32(i32 137, i32 0, i32 0, i8 0, i8 0)",
     "declare float @dx.op.attributeAtVertex.f32(i32, i32, i32, i8, i8)" },
     "Opcode AttributeAtVertex not valid in shader model vs_6_1",
     /*bRegex*/ false);
@@ -2991,10 +2991,10 @@ TEST_F(ValidationTest, GetAttributeAtVertexIn60Fail) {
     "float4 main(float4 col : COLOR) : "
     "SV_Target { return EvaluateAttributeCentroid(col).x; }",
     "ps_6_0",
-    { "call float @dx.op.evalCentroid.f32(i32 89, i32 0, i32 0, i8 0)",
+    { "call fast float @dx.op.evalCentroid.f32(i32 89, i32 0, i32 0, i8 0)",
     "declare float @dx.op.evalCentroid.f32(i32, i32, i32, i8)"
     },
-    { "call float @dx.op.attributeAtVertex.f32(i32 137, i32 0, i32 0, i8 0, i8 0)",
+    { "call fast float @dx.op.attributeAtVertex.f32(i32 137, i32 0, i32 0, i8 0, i8 0)",
     "declare float @dx.op.attributeAtVertex.f32(i32, i32, i32, i8, i8)" },
     "Opcode AttributeAtVertex not valid in shader model ps_6_0", /*bRegex*/ false);
 }
