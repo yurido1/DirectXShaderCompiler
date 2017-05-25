@@ -1482,4 +1482,22 @@ void DxilMDHelper::ConstMDTupleToUint32Vector(MDTuple *pTupleMD, std::vector<uns
   }
 }
 
+bool DxilMDHelper::IsMarkedPrecise(const Instruction *inst) {
+  int32_t val = 0;
+  if (MDNode *precise = inst->getMetadata(kDxilPreciseAttributeMDName)) {
+    assert(precise->getNumOperands() == 1);
+    val = ConstMDToInt32(precise->getOperand(0));
+  }
+  return val;
+}
+
+void DxilMDHelper::MarkPrecise(Instruction *I) {
+  LLVMContext &Ctx = I->getContext();
+  MDNode *preciseNode = MDNode::get(
+    Ctx,
+    { ConstantAsMetadata::get(ConstantInt::get(Type::getInt32Ty(Ctx), 1)) });
+
+  I->setMetadata(DxilMDHelper::kDxilPreciseAttributeMDName, preciseNode);
+}
+
 } // namespace hlsl
