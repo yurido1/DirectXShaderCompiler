@@ -1,6 +1,6 @@
 // RUN: %dxc -E main -T ps_6_0 %s | FileCheck %s
 
-// CHECK-NOT: !dx.precise
+// CHECK: fast
 
 float4 main(float a : A) : SV_Target
 {

@@ -566,7 +566,33 @@ bool Scalarizer::visitShuffleVectorInst(ShuffleVectorInst &SVI) {
     else
       Res[I] = Op1[Selector - Op0.size()];
   }
+  // HLSL Change Begin.
+  // For shuffle, don't update FPMathFlags for its components.
+  // Because shuffle will not generate new value, it just move exist value.
+  // Save original FPMathFlags first.
+  SmallVector<FastMathFlags, 4> FPMathFlags;
+  if (isa<FPMathOperator>(&SVI)) {
+    for (unsigned I = 0; I < NumElems; ++I) {
+      if (Instruction *FPMathOp = dyn_cast<Instruction>(Res[I])) {
+        FPMathFlags.emplace_back(FPMathOp->getFastMathFlags());
+      }
+    }
+  }
+  // HLSL Change End.
+
   gather(&SVI, Res);
+
+  // HLSL Change Begin.
+  // Recover original FPMathFlags.
+  if (!FPMathFlags.empty()) {
+    for (int I = NumElems - 1; I >= 0; --I) {
+      if (Instruction *FPMathOp = dyn_cast<Instruction>(Res[I])) {
+        FPMathOp->copyFastMathFlags(FPMathFlags.pop_back_val());
+      }
+    }
+  }
+  // HLSL Change End.
+
   return true;
 }
 

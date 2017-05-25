@@ -1,6 +1,6 @@
 // RUN: %dxc -E main -T vs_6_0 %s | FileCheck %s
 
-// CHECK: !dx.precise
+// CHECK-NOT: fast
 
 //--------------------------------------------------------------------------------------
 // File: BasicHLSL11_VS.hlsl
@@ -31,8 +31,6 @@ struct VS_INPUT
 
 struct VS_OUTPUT
 {
-	float3 vNormal		: NORMAL;
-	float2 vTexcoord	: TEXCOORD0;
     precise float4 vPosition	: SV_POSITION;
 };
 
@@ -47,8 +45,7 @@ VS_OUTPUT main( VS_INPUT Input )
 	VS_OUTPUT Output;
 	
 	Output.vPosition = mul( float4( Input.vPosition, 1.0 ), g_mWorldViewProjection );
-	Output.vNormal = mul( Input.vNormal, (float3x3)g_mWorld );
-	Output.vTexcoord = Input.vTexcoord;
+
 	
 	return Output;
 }
