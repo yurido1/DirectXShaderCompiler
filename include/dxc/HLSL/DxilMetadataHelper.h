@@ -326,6 +326,9 @@ public:
   // Control flow hints.
   static llvm::MDNode *EmitControlFlowHints(llvm::LLVMContext &Ctx, std::vector<DXIL::ControlFlowHint> &hints);
 
+  // DXIL dx.precise metadata for fast math flags on Call instructions.
+  void EmitDxilPreciseMD();
+  void LoadDxilPreciseMD();
 
   // Shader specific.
   llvm::MDTuple *EmitDxilGSState(DXIL::InputPrimitive Primitive, unsigned MaxVertexCount, 

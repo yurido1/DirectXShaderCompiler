@@ -24,6 +24,8 @@
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Metadata.h"
 #include "llvm/IR/Module.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Operator.h"
 #include "llvm/Support/raw_ostream.h"
 #include <array>
 #include <algorithm>
@@ -907,6 +909,58 @@ MDNode *DxilMDHelper::EmitControlFlowHints(llvm::LLVMContext &Ctx, std::vector<D
   // Set the first operand to itself.
   hintsNode->replaceOperandWith(0, hintsNode);
   return hintsNode;
+}
+
+//QQQ
+void DxilMDHelper::EmitDxilPreciseMD() {
+  MDNode *pDXPreciseMD = MDNode::get(m_pModule->getContext(), ConstantAsMetadata::get(ConstantInt::get(Type::getInt32Ty(m_pModule->getContext()), 1)));
+
+  for (auto itF = m_pModule->begin(), endF = m_pModule->end(); itF != endF; ++itF) {
+    Function *F = itF;
+    
+    for (auto itBB = F->begin(), endBB = F->end(); itBB != endBB; ++itBB) {
+      BasicBlock *BB = itBB;
+
+      for (auto itI = BB->begin(), endI = BB->end(); itI != endI; ++itI) {
+        if (isa<FPMathOperator>(itI)) {
+          if (CallInst *CI = dyn_cast<CallInst>(itI)) {
+            MDNode *pMD = nullptr;
+            FastMathFlags FMF = CI->getFastMathFlags();
+            if (!FMF.unsafeAlgebra()) {
+              pMD = pDXPreciseMD;
+            }
+            CI->setMetadata(DxilMDHelper::kDxilPreciseAttributeMDName, pMD);
+          }
+        }
+      }
+    }
+  }
+}
+
+void DxilMDHelper::LoadDxilPreciseMD() {
+  FastMathFlags FMF;
+  FMF.setUnsafeAlgebra();
+
+  for (auto itF = m_pModule->begin(), endF = m_pModule->end(); itF != endF; ++itF) {
+    Function *F = itF;
+    
+    for (auto itBB = F->begin(), endBB = F->end(); itBB != endBB; ++itBB) {
+      BasicBlock *BB = itBB;
+
+      for (auto itI = BB->begin(), endI = BB->end(); itI != endI; ++itI) {
+        if (isa<FPMathOperator>(itI)) {
+          if (CallInst *CI = dyn_cast<CallInst>(itI)) {
+            MDNode *pMD = CI->getMetadata(DxilMDHelper::kDxilPreciseAttributeMDName);
+            if (!pMD) {
+              CI->copyFastMathFlags(FMF);
+            } else {
+              CI->setMetadata(DxilMDHelper::kDxilPreciseAttributeMDName, nullptr);
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 MDTuple *DxilMDHelper::EmitDxilSampler(const DxilSampler &S) {
