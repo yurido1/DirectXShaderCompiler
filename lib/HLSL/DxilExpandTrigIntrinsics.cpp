@@ -190,7 +190,9 @@ static Value *emitUnaryFloat(IRBuilder<> &builder, Value *X, OP *dxOp, OP::OpCod
   CallInst *Call = builder.CreateCall(F, Args, name);
 
   if (isPreciseBuilder(builder))
-    DxilMDHelper::MarkPrecise(Call);
+    DxilModule::SetPreciseFastMathFlags(Call);
+  else
+    Call->setFastMathFlags(builder.getFastMathFlags());
   return Call;
 }
 

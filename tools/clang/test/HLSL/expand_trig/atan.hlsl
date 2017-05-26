@@ -1,7 +1,7 @@
 // RUN: %dxc -Emain -Tps_6_0 %s | %opt -S -hlsl-dxil-expand-trig-intrinsics | %FileCheck %s
 
-// CHECK: [[X:%.*]]   = call float @dx.op.loadInput.f32(i32 4
-// CHECK: [[r0:%.*]]  = call float @dx.op.unary.f32(i32 6, float [[X]]
+// CHECK: [[X:%.*]]   = call fast float @dx.op.loadInput.f32(i32 4
+// CHECK: [[r0:%.*]]  = call fast float @dx.op.unary.f32(i32 6, float [[X]]
 
 // CHECK: [[b0:%.*]]  = fcmp fast ugt float [[r0]], 1.000000e+00
 // CHECK: [[r1:%.*]]  = fdiv fast float 1.000000e+00, [[r0]]
