@@ -1376,8 +1376,8 @@ void DxilModule::SetPreciseFastMathFlags(llvm::Instruction *inst) {
 // flags to dx.precise metadata during serialization and back to fast
 // math flags during deserialization.
 bool DxilModule::PreservesFastMathFlags(const llvm::Instruction *inst) {
-  return
-    isa<FPMathOperator>(inst) && (isa<BinaryOperator>(inst) || isa<FCmpInst>(inst));
+  return isa<FPMathOperator>(inst) && 
+        (isa<BinaryOperator>(inst) || isa<FCmpInst>(inst) || isa<CallInst>(inst));
 }
 
 bool DxilModule::IsPrecise(const Instruction *inst) const {
