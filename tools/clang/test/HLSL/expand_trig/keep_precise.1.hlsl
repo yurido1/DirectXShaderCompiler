@@ -4,20 +4,18 @@
 
 // A
 // CHECK: fmul float {{.*}}, 0x3FF7154760000000
-// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}}), !dx.precise
-// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}}), !dx.precise
+// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}})
+// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}})
 
 // B
 // CHECK: fmul fast float {{.*}}, 0x3FF7154760000000
-// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}})
-// CHECK-NOT: !dx.precise
-// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}})
-// CHECK-NOT: !dx.precise
+// CHECK: call fast float @dx.op.unary.f32(i32 21, float {{.*}})
+// CHECK: call fast float @dx.op.unary.f32(i32 21, float {{.*}})
 
 // C
 // CHECK: fmul float {{.*}}, 0x3FF7154760000000
-// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}}), !dx.precise
-// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}}), !dx.precise
+// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}})
+// CHECK: call float @dx.op.unary.f32(i32 21, float {{.*}})
 
 // CHECK: ret
 

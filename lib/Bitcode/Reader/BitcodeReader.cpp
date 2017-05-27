@@ -4723,6 +4723,7 @@ getBitcodeModuleImpl(std::unique_ptr<DataStreamer> Streamer, StringRef Name,
                      bool MaterializeAll, bool ShouldLazyLoadMetadata) {
   std::unique_ptr<Module> M = make_unique<Module>(Name, Context);
   M->setMaterializer(R);
+  M->SetFromBitCode(true);  // HLSL Change: set that the module comes from bitcode, so that DxilModule converts dx.precise MD to 'fast' math flags
 
   auto cleanupOnError = [&](std::error_code EC) {
     R->releaseBuffer(); // Never take ownership on error.

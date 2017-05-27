@@ -939,6 +939,9 @@ void DxilMDHelper::EmitDxilPreciseMD() {
 }
 
 void DxilMDHelper::LoadDxilPreciseMD() {
+  if (!m_pModule->GetFromBitCode())
+    return;
+
   FastMathFlags FMF;
   FMF.setUnsafeAlgebra();
 

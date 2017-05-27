@@ -233,6 +233,7 @@ private:
   // HLSL Change start
   hlsl::HLModule *TheHLModule = nullptr;
   hlsl::DxilModule *TheDxilModule = nullptr;
+  bool bFromBitCode = false;
   // HLSL Change end
 
 /// @}
@@ -700,6 +701,8 @@ public:
   hlsl::DxilModule &GetDxilModule() const { return *TheDxilModule; }
   hlsl::DxilModule &GetOrCreateDxilModule(bool skipInit = false);
   void ResetDxilModule();
+  void SetFromBitCode(bool b) { bFromBitCode = b; }
+  bool GetFromBitCode() const { return bFromBitCode; }
   // HLSL Change end
 };
 
